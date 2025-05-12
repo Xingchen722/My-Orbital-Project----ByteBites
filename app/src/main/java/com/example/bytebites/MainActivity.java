@@ -38,21 +38,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-//            @Override
-//            public void onClick(View view) {
-//            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-//            emailIntent.setData(Uri.parse("mailto:someone@example.com")); // 收件人邮箱（可以替换）
-//            emailIntent.putExtra(Intent.EXTRA_SUBJECT,"Sign Up Request"); // 邮件主题
-//            emailIntent.putExtra(Intent.EXTRA_TEXT,"Hi, I would like to sign up for ByteBites!"); // 邮件正文
-//
-//            // 检查是否有邮件应用可以处理这个 Intent
-//            if(emailIntent.resolveActivity(getPackageManager())!=null) {
-//                    startActivity(emailIntent); // 启动邮件应用
-//                } else {
-//                    Toast.makeText(MainActivity.this, "No email app found", Toast.LENGTH_SHORT).show();
-//                }
-//            }
+        
         signupButton = findViewById(R.id.buttonSignup);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
