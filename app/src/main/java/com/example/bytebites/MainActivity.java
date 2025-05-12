@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button signupButton = findViewById(R.id.buttonSignup);
-        signupButton.setOnClickListener(new View.OnClickListener() {
+
 //            @Override
 //            public void onClick(View view) {
 //            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
@@ -54,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 //                    Toast.makeText(MainActivity.this, "No email app found", Toast.LENGTH_SHORT).show();
 //                }
 //            }
+        signupButton = findViewById(R.id.buttonSignup);
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 跳转到 RegisterActivity
