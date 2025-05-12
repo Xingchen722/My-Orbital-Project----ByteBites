@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 // 登录成功后跳转到 HomeActivity
                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
-                finish(); // 不让用户回退到登录页
+                finish(); //  不让用户回退到登录页
             }
         });
 
