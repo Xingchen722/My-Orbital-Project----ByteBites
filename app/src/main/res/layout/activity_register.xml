@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/back"
     android:padding="24dp"
-    android:gravity="center">
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/registerToolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:title="Register"
+        android:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_arrow_back_24" />
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="Register"
+        android:textColor="#d4E4EF"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        />
 
     <EditText
         android:id="@+id/registerUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Username"
+        android:textColorHint="#d4E4EF"
+        android:textColor="#000000"
+        android:textSize="20sp"
         android:inputType="text"
         android:minHeight="48dp" />
 
@@ -19,8 +48,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Password"
+        android:textColorHint="#d4E4EF"
+        android:textColor="#000000"
+        android:textSize="20sp"
         android:inputType="textPassword"
         android:minHeight="48dp" />
+
+    <RelativeLayout
+        android:layout_width="294dp"
+        android:layout_height="181dp">
+
+        <ImageView
+            android:id="@+id/topImage"
+            android:layout_width="128dp"
+            android:layout_height="157dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="-2dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/eyes" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/registerButton"
@@ -28,4 +74,5 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:layout_marginTop="48dp" />
+
 </LinearLayout>

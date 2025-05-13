@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.net.Uri;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 
 
@@ -30,11 +31,25 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 这里你可以做用户名密码验证
-                // 登录成功后跳转到 HomeActivity
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish(); //  不让用户回退到登录页
+                String enteredUser = usernameEditText.getText().toString();
+                String enteredPass = passwordEditText.getText().toString();
+
+                // 从 SharedPreferences 读取注册时保存的用户名/密码
+                SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                String savedUser = prefs.getString("username", "");
+                String savedPass = prefs.getString("password", "");
+
+                // 校验
+                if (enteredUser.equals(savedUser) && enteredPass.equals(savedPass)) {
+                    // 登录成功，跳转到主页
+                    Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(toHome);
+                    finish();  // 登录后不返回登录页
+                } else {
+                    // 登录失败，弹出错误提示
+                    Toast.makeText(MainActivity.this,
+                            "Username or password incorrect!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

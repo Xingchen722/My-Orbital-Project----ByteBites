@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.*;
 import android.view.View;
+import androidx.appcompat.widget.Toolbar;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +14,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText registerUsername, registerPassword;
     Button registerButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,5 +51,15 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Toolbar toolbar = findViewById(R.id.registerToolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
+
 }
