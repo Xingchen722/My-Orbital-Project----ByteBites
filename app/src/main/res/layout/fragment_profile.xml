@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/avatarImageView"
+        android:layout_width="74dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:src="@drawable/hunger" />
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter the nickname"
+        android:minHeight="48dp" />
+
+    <TextView
+        android:text="food preference"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox android:id="@+id/cbVegetarian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="vegetarian diet" />
+
+    <CheckBox android:id="@+id/cbLowCal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="low calorie" />
+
+    <CheckBox android:id="@+id/cbNoNuts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No nuts" />
+</LinearLayout>
