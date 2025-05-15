@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.widget.Toast;
 import android.content.SharedPreferences;
 
-
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     // 登录成功，跳转到主页
                     Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(toHome);
-                    finish();  // 登录后不返回登录页
+                    finish(); // 登录后不返回登录页
                 } else {
                     // 登录失败，弹出错误提示
                     Toast.makeText(MainActivity.this,
@@ -52,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         signupButton = findViewById(R.id.buttonSignup);
         signupButton.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
-    });
+        });
 
     }
 }

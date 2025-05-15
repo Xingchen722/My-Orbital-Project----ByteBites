@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteBites - Student Dining</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .login-container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: #2d2d2d;
+            color: #ffffff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        .input-group input:focus {
+            outline: 2px solid #4CAF50;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #777;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #444;
+        }
+        
+        .divider-text {
+            padding: 0 10px;
+        }
+        
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .google-btn:hover {
+            background-color: #357ae8;
+        }
+        
+        .google-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .signup-link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">ByteBites</div>
+        
+        <div class="input-group">
+            <label for="username">Email, Phone, or Username</label>
+            <input type="text" id="username" placeholder="Enter your email, phone, or username">
+        </div>
+        
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        
+        <button class="login-btn">Log In</button>
+        
+        <div class="divider">
+            <span class="divider-text">OR</span>
+        </div>
+        
+        <button class="google-btn">
+            <span class="google-icon">G</span>
+            Continue with Google
+        </button>
+        
+        <div class="signup-link">
+            Don't have an account? <a href="#">Sign Up Here</a>
+        </div>
+    </div>
+</body>
+</html>

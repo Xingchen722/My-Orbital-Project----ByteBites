@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ByteBites - Operator Dashboard</title>
+    <style>
+        /* Mobile Dark Theme */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 375px;
+            margin: 0 auto;
+            padding: 15px;
+            box-sizing: border-box;
+            padding-bottom: 70px; /* Space for bottom nav */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-operator {
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .operator-name {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 20px 0 10px;
+            color: #4CAF50;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title .icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .review-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .reviewer {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .rating {
+            color: #FFC107;
+            font-size: 14px;
+        }
+
+        .review-text {
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .review-date {
+            font-size: 11px;
+            color: #777;
+        }
+
+        .reply-btn {
+            background: none;
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .promo-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .promo-icon {
+            font-size: 24px;
+            margin-right: 12px;
+            color: #2196F3;
+        }
+
+        .promo-content h4 {
+            margin: 0 0 4px;
+            font-size: 15px;
+        }
+
+        .promo-content p {
+            margin: 0;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .analytics-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 150px;
+            background-color: #2d2d2d;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1e1e1e;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #4CAF50;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ByteBites</div>
+            <div class="profile-icon">👨‍🍳</div>
+        </header>
+
+        <div class="welcome-operator">
+            Hello, <span class="operator-name">Mr. Lee</span> 👋<br>
+            Your stall: <span style="color: #aaa;">Noodle House</span>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Today's Orders</div>
+                <div class="stat-value">42</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg. Rating</div>
+                <div class="stat-value">4.6</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">New Reviews</div>
+                <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Questions</div>
+                <div class="stat-value">2</div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <h2 class="section-title">
+            <span class="icon">⭐</span> Latest Reviews
+        </h2>
+        
+        <div class="review-card">
+            <div class="review-header">
+                <span class="reviewer">Alex C.</span>
+                <span class="rating">★★★★☆</span>
+            </div>
+            <div class="review-text">
+                The beef noodles were delicious but could use more vegetables. The broth was perfect though!
+            </div>
+            <div class="review-date">
+                2 hours ago • Spicy Beef Noodles
+            </div>
+            <button class="reply-btn">Reply</button>
+        </div>
+
+        <div class="review-card">
+            <div class="review-header">
+                <span class="reviewer">Sarah M.</span>
+                <span class="rating">★★★★★</span>
+            </div>
+            <div class="review-text">
+                Best ramen on campus! Always my go-to lunch. The portion size is great for the price.
+            </div>
+            <div class="review-date">
+                Yesterday • Tonkotsu Ramen
+            </div>
+            <button class="reply-btn">Reply</button>
+        </div>
+
+        <!-- Collaboration Section -->
+        <h2 class="section-title">
+            <span class="icon">🤝</span> Collaboration Offers
+        </h2>
+        
+        <div class="promo-card">
+            <div class="promo-icon">🍱</div>
+            <div class="promo-content">
+                <h4>Combo with Sushi Express</h4>
+                <p>Create a ramen+sushi combo meal for $12.99 (usually $15.98)</p>
+            </div>
+        </div>
+
+        <div class="promo-card">
+            <div class="promo-icon">🍹</div>
+            <div class="promo-content">
+                <h4>Bubble Tea Pairing</h4>
+                <p>Team up with Tea Station for drink+meal discounts</p>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <h2 class="section-title">
+            <span class="icon">📊</span> Sales Analytics
+        </h2>
+        
+        <div class="analytics-card">
+            <h4>Top Selling Items (This Week)</h4>
+            <div class="chart-placeholder">
+                [Chart: Spicy Beef Noodles 45%, Tonkotsu Ramen 30%, Chicken Ramen 25%]
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h4>Customer Peak Times</h4>
+            <div class="chart-placeholder">
+                [Chart: 12-1pm (65%), 6-7pm (25%), Other (10%)]
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item active">
+                <span class="nav-icon">⭐</span>
+                <span>Reviews</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🤝</span>
+                <span>Collab</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
