@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'register_screen.dart';
 import 'home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> saveCredentials(String username, String password) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', username);
+  await prefs.setString('password', password);
+}
 
 class LoginScreen extends StatefulWidget {
   @override

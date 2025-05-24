@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
@@ -48,7 +48,17 @@ class RegisterScreen extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // TODO: 实现保存注册信息
+                void _register() async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('username', usernameController.text);
+                  await prefs.setString('password', passwordController.text);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Registration successful!')),
+                  );
+
+                  Navigator.pushReplacementNamed(context, '/login');
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF16a951),
