@@ -81,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  Image.asset('assets/hum.png', height: 58),
                   const SizedBox(height: 20),
                   const Text(
                     'ByteBites',
