@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
 class CanteenPage extends StatelessWidget {
   const CanteenPage({super.key});
 
@@ -11,7 +7,7 @@ class CanteenPage extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           Text('Student Home', style: TextStyle(fontSize: 24)),
           SizedBox(height: 20),
           Text('View and order from canteens', style: TextStyle(fontSize: 16)),
@@ -29,10 +25,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String username = '';
-  String nickname = '';
+  String username = 'student1';
+  String nickname = 'student1';
   String dietaryPreference = 'No Preference';
-  File? _avatarImage;
+
   final List<String> dietaryOptions = [
     'No Preference',
     'Vegetarian',
@@ -45,69 +41,13 @@ class _ProfilePageState extends State<ProfilePage> {
     'Pescatarian'
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      username = prefs.getString('currentUsername') ?? 'No Username';
-      nickname = prefs.getString('nickname_$username') ?? username;
-      dietaryPreference = prefs.getString('dietary_$username') ?? 'No Preference';
-      String? avatarPath = prefs.getString('currentUserAvatar');
-      if (avatarPath != null && avatarPath.isNotEmpty) {
-        _avatarImage = File(avatarPath);
-      }
-    });
-  }
-
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    
-    if (image != null) {
-      setState(() {
-        _avatarImage = File(image.path);
-      });
-      
-      // 保存头像路径
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('currentUserAvatar', image.path);
-      
-      // 更新用户列表中的头像路径
-      List<String>? users = prefs.getStringList('users');
-      if (users != null) {
-        for (int i = 0; i < users.length; i++) {
-          List<String> userData = users[i].split('|');
-          if (userData[0] == username) {
-            if (userData.length > 3) {
-              userData[3] = image.path;
-            } else {
-              userData.add(image.path);
-            }
-            users[i] = userData.join('|');
-            break;
-          }
-        }
-        await prefs.setStringList('users', users);
-      }
-    }
-  }
-
-  Future<void> _saveNickname(String newNickname) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('nickname_$username', newNickname);
+  void _saveNickname(String newNickname) {
     setState(() {
       nickname = newNickname;
     });
   }
 
-  Future<void> _saveDietaryPreference(String preference) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('dietary_$username', preference);
+  void _saveDietaryPreference(String preference) {
     setState(() {
       dietaryPreference = preference;
     });
@@ -120,36 +60,10 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: _pickImage,
-            child: Stack(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: _avatarImage != null ? FileImage(_avatarImage!) : null,
-                  child: _avatarImage == null
-                      ? const Icon(Icons.person, size: 50, color: Colors.grey)
-                      : null,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          const CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.grey,
+            child: Icon(Icons.person, size: 50, color: Colors.white),
           ),
           const SizedBox(height: 20),
           Text(
@@ -181,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
     required Function(String) onSave,
   }) {
     final controller = TextEditingController(text: value);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -195,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               child: TextField(
                 controller: controller,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12),
                 ),
@@ -240,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _saveDietaryPreference(newValue);
             }
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
           ),
@@ -253,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (dietaryPreference == 'No Preference') {
       return Container();
     }
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -288,7 +202,7 @@ class HomeScreenStudent extends StatefulWidget {
 class _HomeScreenStudentState extends State<HomeScreenStudent> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [CanteenPage(), ProfilePage()];
+  final List<Widget> _pages = const [CanteenPage(), ProfilePage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -300,7 +214,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ByteBites - Student'),
+        title: const Text('ByteBites - Student'),
         backgroundColor: Colors.green[700],
       ),
       body: IndexedStack(index: _selectedIndex, children: _pages),
@@ -308,7 +222,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.green[700],
-        unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
+        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant_menu),
