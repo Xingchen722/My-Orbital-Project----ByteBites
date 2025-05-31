@@ -1,0 +1,55 @@
+{
+    "appTitle": "ByteBites",
+    "canteen": "餐厅",
+    "explore": "探索",
+    "profile": "个人资料",
+    "nickname": "昵称",
+    "dietaryPreference": "饮食偏好",
+    "language": "语言",
+    "noPreference": "无偏好",
+    "vegetarian": "素食",
+    "vegan": "纯素",
+    "halal": "清真",
+    "kosher": "犹太洁食",
+    "glutenFree": "无麸质",
+    "nutAllergy": "坚果过敏",
+    "lactoseIntolerant": "乳糖不耐",
+    "pescatarian": "鱼素",
+    "loading": "加载中...",
+    "noMatchingUsers": "没有找到匹配的用户",
+    "viewProfile": "查看 {nickname} 的主页",
+    "@viewProfile": {
+        "placeholders": {
+            "nickname": {
+                "type": "String"
+            }
+        }
+    },
+    "languageChanged": "语言已更改为 {language}",
+    "@languageChanged": {
+        "placeholders": {
+            "language": {
+                "type": "String"
+            }
+        }
+    },
+    "studentHome": "学生主页",
+    "viewAndOrder": "查看和订购餐厅食物",
+    "viewMenu": "查看菜单",
+    "menuNotification": "正在查看 {canteen} 的菜单",
+    "@menuNotification": {
+        "placeholders": {
+            "canteen": {
+                "type": "String"
+            }
+        }
+    },
+    "canteenDescriptionSummit": "现代化的餐饮中心，提供多样化的美食选择",
+    "canteenDescriptionFrontier": "提供各种亚洲和西方美食",
+    "canteenDescriptionTechno": "靠近工程学院的便捷餐厅",
+    "canteenDescriptionPGP": "靠近PGP宿舍的餐厅",
+    "canteenDescriptionDeck": "靠近文学院的餐厅",
+    "canteenDescriptionTerrace": "靠近商学院的餐厅",
+    "canteenDescriptionYIH": "提供清真食品的餐厅",
+    "canteenDescriptionFineFood": "提供国际美食的高级餐厅"
+} 

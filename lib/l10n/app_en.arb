@@ -1,0 +1,55 @@
+{
+    "appTitle": "ByteBites",
+    "canteen": "Canteen",
+    "explore": "Explore",
+    "profile": "Profile",
+    "nickname": "Nickname",
+    "dietaryPreference": "Dietary Preference",
+    "language": "Language",
+    "noPreference": "No Preference",
+    "vegetarian": "Vegetarian",
+    "vegan": "Vegan",
+    "halal": "Halal",
+    "kosher": "Kosher",
+    "glutenFree": "Gluten-Free",
+    "nutAllergy": "Nut Allergy",
+    "lactoseIntolerant": "Lactose Intolerant",
+    "pescatarian": "Pescatarian",
+    "loading": "Loading...",
+    "noMatchingUsers": "No matching users found",
+    "viewProfile": "View {nickname}'s profile",
+    "@viewProfile": {
+        "placeholders": {
+            "nickname": {
+                "type": "String"
+            }
+        }
+    },
+    "languageChanged": "Language changed to {language}",
+    "@languageChanged": {
+        "placeholders": {
+            "language": {
+                "type": "String"
+            }
+        }
+    },
+    "studentHome": "Student Home",
+    "viewAndOrder": "View and order from canteens",
+    "viewMenu": "View Menu",
+    "menuNotification": "Viewing menu of {canteen}",
+    "@menuNotification": {
+        "placeholders": {
+            "canteen": {
+                "type": "String"
+            }
+        }
+    },
+    "canteenDescriptionSummit": "Modern dining center offering diverse food choices",
+    "canteenDescriptionFrontier": "Offering various Asian and Western cuisines",
+    "canteenDescriptionTechno": "Convenient restaurant near the Engineering School",
+    "canteenDescriptionPGP": "Restaurant near PGP dormitory",
+    "canteenDescriptionDeck": "Restaurant near the Arts & Social Sciences",
+    "canteenDescriptionTerrace": "Restaurant near the Business School",
+    "canteenDescriptionYIH": "Restaurant offering halal food",
+    "canteenDescriptionFineFood": "Premium dining experience with international cuisine"
+} 
