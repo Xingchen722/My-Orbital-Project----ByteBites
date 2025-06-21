@@ -1,14 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/canteen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_application_1/screens/canteen/student/student_canteen_review_dialog.dart';
+import 'package:flutter_application_1/screens/canteen/student/student_canteen_reviews_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/models/review.dart';
+import 'dart:convert';
+import 'package:flutter_application_1/screens/canteen/student/student_canteen_menu_reviews.dart';
 
-class StudentCanteenCard extends StatelessWidget {
+class StudentCanteenCard extends StatefulWidget {
   final Canteen canteen;
 
   const StudentCanteenCard({
     super.key,
     required this.canteen,
   });
+
+  @override
+  State<StudentCanteenCard> createState() => _StudentCanteenCardState();
+}
+
+class _StudentCanteenCardState extends State<StudentCanteenCard> {
+  double _averageRating = 0.0;
+  int _reviewCount = 0;
+  bool _isLoadingRating = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRating();
+  }
+
+  Future<void> _loadRating() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> reviewStrings = prefs.getStringList('canteen_reviews') ?? [];
+    
+    List<Review> reviews = [];
+    for (String reviewString in reviewStrings) {
+      try {
+        final reviewMap = jsonDecode(reviewString) as Map<String, dynamic>;
+        final review = Review.fromJson(reviewMap);
+        if (review.canteenId == widget.canteen.id) {
+          reviews.add(review);
+        }
+      } catch (e) {
+        continue;
+      }
+    }
+
+    double totalRating = 0.0;
+    for (Review review in reviews) {
+      totalRating += review.rating;
+    }
+    double averageRating = reviews.isNotEmpty ? totalRating / reviews.length : 0.0;
+
+    setState(() {
+      _averageRating = averageRating;
+      _reviewCount = reviews.length;
+      _isLoadingRating = false;
+    });
+  }
 
   String _getLocalizedDescription(BuildContext context, Canteen canteen) {
     final l10n = AppLocalizations.of(context)!;
@@ -32,6 +83,36 @@ class StudentCanteenCard extends StatelessWidget {
       default:
         return canteen.description;
     }
+  }
+
+  Future<void> _showReviewDialog() async {
+    final result = await showDialog<Review>(
+      context: context,
+      builder: (context) => StudentCanteenReviewDialog(
+        canteenId: widget.canteen.id,
+        canteenName: widget.canteen.name,
+      ),
+    );
+
+    if (result != null) {
+      // 重新加载评分
+      _loadRating();
+    }
+  }
+
+  void _showReviews() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StudentCanteenReviewsScreen(
+          canteenId: widget.canteen.id,
+          canteenName: widget.canteen.name,
+        ),
+      ),
+    ).then((_) {
+      // 返回时重新加载评分
+      _loadRating();
+    });
   }
 
   @override
@@ -62,7 +143,7 @@ class StudentCanteenCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  canteen.name,
+                  widget.canteen.name,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -74,41 +155,117 @@ class StudentCanteenCard extends StatelessWidget {
                     const Icon(Icons.location_on, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
-                      canteen.location,
+                      widget.canteen.location,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(_getLocalizedDescription(context, canteen)),
+                Text(_getLocalizedDescription(context, widget.canteen)),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     const Icon(Icons.access_time, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
-                      canteen.operatingHours,
+                      widget.canteen.operatingHours,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: 实现查看菜单功能
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(l10n.menuNotification(canteen.name)),
+                const SizedBox(height: 12),
+                // 评分显示
+                if (!_isLoadingRating) ...[
+                  Row(
+                    children: [
+                      ...List.generate(5, (index) {
+                        return Icon(
+                          index < _averageRating.floor() 
+                              ? Icons.star 
+                              : (index < _averageRating ? Icons.star_half : Icons.star_border),
+                          color: Colors.amber,
+                          size: 18,
+                        );
+                      }),
+                      const SizedBox(width: 8),
+                      Text(
+                        _reviewCount > 0 
+                            ? '${_averageRating.toStringAsFixed(1)} (${_reviewCount} ${l10n.reviews})'
+                            : l10n.noReviewsYet,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF16a951),
-                    minimumSize: const Size(double.infinity, 45),
+                    ],
                   ),
-                  child: Text(
-                    l10n.viewMenu,
-                    style: const TextStyle(color: Colors.white),
+                  const SizedBox(height: 12),
+                ],
+                // 按钮行
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => StudentCanteenMenuReviews(canteen: widget.canteen),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF16a951),
+                          minimumSize: const Size(0, 45),
+                        ),
+                        child: Text(
+                          l10n.viewMenu,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _showReviewDialog,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          minimumSize: const Size(0, 45),
+                        ),
+                        child: Text(
+                          l10n.writeReview,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // 新增：菜单与点评按钮
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Icons.restaurant_menu),
+                    label: Text(l10n.menuAndReviews),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => StudentCanteenMenuReviews(canteen: widget.canteen),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                // 查看评价按钮
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: _showReviews,
+                    child: Text(
+                      l10n.viewAllReviews,
+                      style: const TextStyle(color: Color(0xFF16a951)),
+                    ),
                   ),
                 ),
               ],

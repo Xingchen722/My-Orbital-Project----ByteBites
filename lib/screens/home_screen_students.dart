@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/screens/canteen/student/student_canteen_list.dart';
+import 'package:flutter_application_1/screens/profile/fun_interaction_screen.dart';
 import 'dart:io';
 
 class CanteenPage extends StatelessWidget {
@@ -347,6 +348,50 @@ class _ProfilePageState extends State<ProfilePage> {
           _buildLanguageSelector(),
           const SizedBox(height: 30),
           _buildDietaryBadge(),
+          const SizedBox(height: 30),
+          // 趣味互动按钮
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.funInteraction,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    AppLocalizations.of(context)!.funInteractionDescription,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FunInteractionScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.casino),
+                    label: Text(AppLocalizations.of(context)!.tryFunInteraction),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF16a951),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
