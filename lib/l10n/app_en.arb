@@ -93,5 +93,8 @@
     "searchByDish": "Search by dish name",
     "noCanteenFound": "No canteen found",
     "edit": "Edit",
-    "menuAndReviews": "Menu & Reviews"
+    "menuAndReviews": "Menu & Reviews",
+    "noAnnouncementsYet": "No announcements yet",
+    "menuChanged": "Menu has been updated",
+    "vendorReplied": "Vendor replied to a review"
 } 

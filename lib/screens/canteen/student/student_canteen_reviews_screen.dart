@@ -31,16 +31,15 @@ class _StudentCanteenReviewsScreenState extends State<StudentCanteenReviewsScree
 
   Future<void> _loadReviews() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> reviewStrings = prefs.getStringList('canteen_reviews') ?? [];
+    final key = 'canteen_reviews_${widget.canteenId}';
+    List<String> reviewStrings = prefs.getStringList(key) ?? [];
     
     List<Review> reviews = [];
     for (String reviewString in reviewStrings) {
       try {
         final reviewMap = jsonDecode(reviewString) as Map<String, dynamic>;
         final review = Review.fromJson(reviewMap);
-        if (review.canteenId == widget.canteenId) {
-          reviews.add(review);
-        }
+        reviews.add(review);
       } catch (e) {
         // 忽略无效的评价数据
         continue;

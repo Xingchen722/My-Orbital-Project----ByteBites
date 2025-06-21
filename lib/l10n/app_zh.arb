@@ -93,5 +93,8 @@
     "searchByDish": "输入菜名筛选餐厅",
     "noCanteenFound": "没有符合条件的餐厅",
     "edit": "编辑",
-    "menuAndReviews": "菜单与点评"
+    "menuAndReviews": "菜单与点评",
+    "noAnnouncementsYet": "暂无公告",
+    "menuChanged": "菜单有变更",
+    "vendorReplied": "商家回复了评价"
 } 

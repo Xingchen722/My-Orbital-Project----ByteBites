@@ -68,3 +68,22 @@ class ByteBitesAppState extends State<ByteBitesApp> {
     );
   }
 }
+
+class Vendor {
+  final String id;
+  final String name;
+  final String description;
+  final String address;
+  final String openingHours;
+  final String logoUrl;
+  // ...
+  Vendor({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.address,
+    required this.openingHours,
+    required this.logoUrl,
+    // ...
+  });
+}

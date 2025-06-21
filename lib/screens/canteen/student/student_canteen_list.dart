@@ -190,15 +190,17 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
     }
     // 动态获取评分
     final prefs = await SharedPreferences.getInstance();
-    List<String> reviewStrings = prefs.getStringList('canteen_reviews') ?? [];
     Map<String, List<double>> canteenRatings = {};
-    for (String reviewString in reviewStrings) {
-      try {
-        final reviewMap = jsonDecode(reviewString) as Map<String, dynamic>;
-        final canteenId = reviewMap['canteenId'];
-        final rating = (reviewMap['rating'] as num).toDouble();
-        canteenRatings.putIfAbsent(canteenId, () => []).add(rating);
-      } catch (_) {}
+    for (var c in canteens) {
+      final key = 'canteen_reviews_${c.id}';
+      List<String> reviewStrings = prefs.getStringList(key) ?? [];
+      for (String reviewString in reviewStrings) {
+        try {
+          final reviewMap = jsonDecode(reviewString) as Map<String, dynamic>;
+          final rating = (reviewMap['rating'] as num).toDouble();
+          canteenRatings.putIfAbsent(c.id, () => []).add(rating);
+        } catch (_) {}
+      }
     }
     Map<String, double> avgRatings = {};
     for (var c in canteens) {

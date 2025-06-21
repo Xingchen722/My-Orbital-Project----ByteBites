@@ -56,9 +56,10 @@ class _StudentCanteenReviewDialogState extends State<StudentCanteenReviewDialog>
     );
 
     // 保存评价到本地存储
-    List<String> reviews = prefs.getStringList('canteen_reviews') ?? [];
+    final key = 'canteen_reviews_${widget.canteenId}';
+    List<String> reviews = prefs.getStringList(key) ?? [];
     reviews.add(jsonEncode(review.toJson()));
-    await prefs.setStringList('canteen_reviews', reviews);
+    await prefs.setStringList(key, reviews);
 
     if (mounted) {
       Navigator.of(context).pop(review);

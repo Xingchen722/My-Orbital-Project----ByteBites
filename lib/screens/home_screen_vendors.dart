@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:flutter_application_1/screens/vendor/vendor_menu_page.dart';
+import 'package:flutter_application_1/screens/vendor/vendor_reviews_page.dart';
 
 class VendorCanteenPage extends StatelessWidget {
   const VendorCanteenPage({super.key});
@@ -35,6 +37,10 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
   String username = '';
   String nickname = '';
   String canteenName = '';
+  String canteenDescription = '';
+  String canteenHours = '';
+  String canteenAddress = '';
+  String canteenId = '';
   File? _avatarImage;
 
   @override
@@ -49,6 +55,10 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
       username = prefs.getString('currentUsername') ?? 'No Username';
       nickname = prefs.getString('nickname_$username') ?? username;
       canteenName = prefs.getString('canteen_$username') ?? 'No Canteen Name';
+      canteenDescription = prefs.getString('canteen_desc_$username') ?? '';
+      canteenHours = prefs.getString('canteen_hours_$username') ?? '';
+      canteenAddress = prefs.getString('canteen_addr_$username') ?? '';
+      canteenId = prefs.getString('canteenId_$username') ?? '';
       String? avatarPath = prefs.getString('currentUserAvatar');
       if (avatarPath != null && avatarPath.isNotEmpty) {
         _avatarImage = File(avatarPath);
@@ -103,6 +113,65 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
     setState(() {
       canteenName = newCanteenName;
     });
+  }
+
+  Future<void> _saveCanteenDescription(String desc) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('canteen_desc_$username', desc);
+    setState(() {
+      canteenDescription = desc;
+    });
+  }
+
+  Future<void> _saveCanteenHours(String hours) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('canteen_hours_$username', hours);
+    setState(() {
+      canteenHours = hours;
+    });
+  }
+
+  Future<void> _saveCanteenAddress(String addr) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('canteen_addr_$username', addr);
+    setState(() {
+      canteenAddress = addr;
+    });
+  }
+
+  Future<void> _saveCanteenId(String newId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('canteenId_$username', newId);
+    // 自动同步Canteen Name
+    final canteenNameFromList = _getCanteenNameById(newId);
+    if (canteenNameFromList != null) {
+      await prefs.setString('canteen_$username', canteenNameFromList);
+      setState(() {
+        canteenName = canteenNameFromList;
+      });
+    }
+    setState(() {
+      canteenId = newId;
+    });
+  }
+
+  String? _getCanteenNameById(String id) {
+    // 可根据实际项目将此处的餐厅列表替换为全局常量或配置
+    const canteenList = [
+      {'id': '1', 'name': 'The Summit'},
+      {'id': '2', 'name': 'Frontier'},
+      {'id': '3', 'name': 'Techno Edge'},
+      {'id': '4', 'name': 'PGP'},
+      {'id': '5', 'name': 'The Deck'},
+      {'id': '6', 'name': 'The Terrace'},
+      {'id': '7', 'name': 'Yusof Ishak House'},
+      {'id': '8', 'name': 'Fine Food'},
+    ];
+    final match = canteenList.firstWhere(
+      (c) => c['id'] == id,
+      orElse: () => {},
+    );
+    return match['name'] as String?;
   }
 
   @override
@@ -164,6 +233,30 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
             value: canteenName,
             onSave: _saveCanteenName,
           ),
+          const SizedBox(height: 20),
+          _buildEditableField(
+            label: 'Description',
+            value: canteenDescription,
+            onSave: _saveCanteenDescription,
+          ),
+          const SizedBox(height: 20),
+          _buildEditableField(
+            label: 'Opening Hours',
+            value: canteenHours,
+            onSave: _saveCanteenHours,
+          ),
+          const SizedBox(height: 20),
+          _buildEditableField(
+            label: 'Address',
+            value: canteenAddress,
+            onSave: _saveCanteenAddress,
+          ),
+          const SizedBox(height: 20),
+          _buildEditableField(
+            label: 'Canteen ID',
+            value: canteenId,
+            onSave: _saveCanteenId,
+          ),
         ],
       ),
     );
@@ -223,16 +316,35 @@ class HomeScreenVendor extends StatefulWidget {
 class _HomeScreenVendorState extends State<HomeScreenVendor> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [VendorCanteenPage(), VendorProfilePage()];
+  late String canteenId;
+  bool _canteenIdLoaded = false;
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _loadCanteenId();
+  }
+
+  void _loadCanteenId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('currentUsername') ?? '';
     setState(() {
-      _selectedIndex = index;
+      canteenId = prefs.getString('canteenId_$username') ?? '1';
+      _canteenIdLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_canteenIdLoaded) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final List<Widget> _pages = [
+      VendorCanteenPage(),
+      VendorMenuPage(canteenId: canteenId),
+      VendorReviewsPage(canteenId: canteenId),
+      VendorProfilePage(),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text('ByteBites - Vendor'),
@@ -241,14 +353,13 @@ class _HomeScreenVendorState extends State<HomeScreenVendor> {
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: (index) => setState(() => _selectedIndex = index),
         selectedItemColor: Colors.blue[700],
         unselectedItemColor: Colors.grey,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+          BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Menu'),
+          BottomNavigationBarItem(icon: Icon(Icons.rate_review), label: 'Reviews'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

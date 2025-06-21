@@ -6,6 +6,7 @@ import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/screens/canteen/student/student_canteen_list.dart';
 import 'package:flutter_application_1/screens/profile/fun_interaction_screen.dart';
 import 'dart:io';
+import 'package:flutter_application_1/widgets/announcement_bar.dart';
 
 class CanteenPage extends StatelessWidget {
   const CanteenPage({super.key});
@@ -559,6 +560,12 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
         backgroundColor: const Color(0xFF16a951),
+        toolbarHeight: 56,
+        automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(36),
+          child: AnnouncementBar(),
+        ),
       ),
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(

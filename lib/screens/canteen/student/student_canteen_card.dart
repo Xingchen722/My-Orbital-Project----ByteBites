@@ -24,25 +24,26 @@ class _StudentCanteenCardState extends State<StudentCanteenCard> {
   double _averageRating = 0.0;
   int _reviewCount = 0;
   bool _isLoadingRating = true;
+  bool _hasUnread = false;
 
   @override
   void initState() {
     super.initState();
     _loadRating();
+    _checkUnread();
   }
 
   Future<void> _loadRating() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> reviewStrings = prefs.getStringList('canteen_reviews') ?? [];
+    final key = 'canteen_reviews_${widget.canteen.id}';
+    List<String> reviewStrings = prefs.getStringList(key) ?? [];
     
     List<Review> reviews = [];
     for (String reviewString in reviewStrings) {
       try {
         final reviewMap = jsonDecode(reviewString) as Map<String, dynamic>;
         final review = Review.fromJson(reviewMap);
-        if (review.canteenId == widget.canteen.id) {
-          reviews.add(review);
-        }
+        reviews.add(review);
       } catch (e) {
         continue;
       }
@@ -58,6 +59,21 @@ class _StudentCanteenCardState extends State<StudentCanteenCard> {
       _averageRating = averageRating;
       _reviewCount = reviews.length;
       _isLoadingRating = false;
+    });
+  }
+
+  Future<void> _checkUnread() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _hasUnread = prefs.getBool('canteen_unread_${widget.canteen.id}') ?? false;
+    });
+  }
+
+  void _clearUnread() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('canteen_unread_${widget.canteen.id}', false);
+    setState(() {
+      _hasUnread = false;
     });
   }
 
@@ -115,162 +131,173 @@ class _StudentCanteenCardState extends State<StudentCanteenCard> {
     });
   }
 
+  void _showMenuAndReviews() {
+    _clearUnread();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StudentCanteenMenuReviews(canteen: widget.canteen),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-              color: Colors.grey[300],
-            ),
-            child: Center(
-              child: Icon(
-                Icons.restaurant,
-                size: 64,
-                color: Colors.grey[600],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                  color: Colors.grey[300],
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.restaurant,
+                    size: 64,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.canteen.name,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                        const SizedBox(width: 4),
+                        Text(
+                          widget.canteen.location,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(_getLocalizedDescription(context, widget.canteen)),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                        const SizedBox(width: 4),
+                        Text(
+                          widget.canteen.operatingHours,
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // 评分显示
+                    if (!_isLoadingRating) ...[
+                      Row(
+                        children: [
+                          ...List.generate(5, (index) {
+                            return Icon(
+                              index < _averageRating.floor() 
+                                  ? Icons.star 
+                                  : (index < _averageRating ? Icons.star_half : Icons.star_border),
+                              color: Colors.amber,
+                              size: 18,
+                            );
+                          }),
+                          const SizedBox(width: 8),
+                          Text(
+                            _reviewCount > 0 
+                                ? '${_averageRating.toStringAsFixed(1)} (${_reviewCount} ${l10n.reviews})'
+                                : l10n.noReviewsYet,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    // 按钮行
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _showMenuAndReviews,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF16a951),
+                              minimumSize: const Size(0, 45),
+                            ),
+                            child: Text(
+                              l10n.viewMenu,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _showReviewDialog,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              minimumSize: const Size(0, 45),
+                            ),
+                            child: Text(
+                              l10n.writeReview,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    // 新增：菜单与点评按钮
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.restaurant_menu),
+                        label: Text(l10n.menuAndReviews),
+                        onPressed: _showMenuAndReviews,
+                      ),
+                    ),
+                    // 新增：查看餐厅评论按钮
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.comment),
+                        label: Text(l10n.viewAllReviews),
+                        onPressed: _showReviews,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (_hasUnread)
+            Positioned(
+              left: 8,
+              top: 8,
+              child: Container(
+                width: 14,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.canteen.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      widget.canteen.location,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(_getLocalizedDescription(context, widget.canteen)),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Icon(Icons.access_time, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      widget.canteen.operatingHours,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                // 评分显示
-                if (!_isLoadingRating) ...[
-                  Row(
-                    children: [
-                      ...List.generate(5, (index) {
-                        return Icon(
-                          index < _averageRating.floor() 
-                              ? Icons.star 
-                              : (index < _averageRating ? Icons.star_half : Icons.star_border),
-                          color: Colors.amber,
-                          size: 18,
-                        );
-                      }),
-                      const SizedBox(width: 8),
-                      Text(
-                        _reviewCount > 0 
-                            ? '${_averageRating.toStringAsFixed(1)} (${_reviewCount} ${l10n.reviews})'
-                            : l10n.noReviewsYet,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                ],
-                // 按钮行
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => StudentCanteenMenuReviews(canteen: widget.canteen),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF16a951),
-                          minimumSize: const Size(0, 45),
-                        ),
-                        child: Text(
-                          l10n.viewMenu,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _showReviewDialog,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                          minimumSize: const Size(0, 45),
-                        ),
-                        child: Text(
-                          l10n.writeReview,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                // 新增：菜单与点评按钮
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    icon: const Icon(Icons.restaurant_menu),
-                    label: Text(l10n.menuAndReviews),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => StudentCanteenMenuReviews(canteen: widget.canteen),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                // 查看评价按钮
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    onPressed: _showReviews,
-                    child: Text(
-                      l10n.viewAllReviews,
-                      style: const TextStyle(color: Color(0xFF16a951)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
