@@ -104,5 +104,6 @@
     "favoriteOnly": "Favorites Only",
     "queueEstimationTitle": "Canteen Queue Estimation",
     "distance": "Distance",
-    "currentPosition": "Current Position"
+    "currentPosition": "Current Position",
+    "vendorReply": "Vendor Reply"
 } 

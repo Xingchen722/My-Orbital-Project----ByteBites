@@ -205,7 +205,20 @@ class _StudentCanteenMenuReviewsState extends State<StudentCanteenMenuReviews> {
                             ...List.generate(5, (i) => Icon(i < r.rating ? Icons.star : Icons.star_border, color: Colors.amber, size: 16)),
                           ],
                         ),
-                        subtitle: Text(r.comment),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(r.comment),
+                            if ((r as dynamic).reply != null && (r as dynamic).reply.toString().isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  '${AppLocalizations.of(context)!.vendorReply}: ${(r as dynamic).reply}',
+                                  style: const TextStyle(fontSize: 13, color: Colors.green, fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                          ],
+                        ),
                         trailing: r.username == currentUsername
                             ? Row(
                                 mainAxisSize: MainAxisSize.min,

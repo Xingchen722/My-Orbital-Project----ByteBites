@@ -112,4 +112,5 @@ class AppLocalizations {
   String get favoriteOnly => translate('favoriteOnly');
   String get queueEstimationTitle => translate('queueEstimationTitle');
   String get distance => translate('distance');
+  String get vendorReply => translate('vendorReply');
 }

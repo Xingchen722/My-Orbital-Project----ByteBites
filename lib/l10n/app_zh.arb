@@ -104,5 +104,6 @@
     "favoriteOnly": "已收藏",
     "queueEstimationTitle": "食堂排队情况估计",
     "distance": "距离",
-    "currentPosition": "当前位置"
+    "currentPosition": "当前位置",
+    "vendorReply": "商家回复"
 } 

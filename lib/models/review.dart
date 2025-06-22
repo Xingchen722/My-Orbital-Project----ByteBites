@@ -6,6 +6,7 @@ class Review {
   final double rating;
   final String comment;
   final DateTime createdAt;
+  final String? reply;
 
   Review({
     required this.id,
@@ -15,6 +16,7 @@ class Review {
     required this.rating,
     required this.comment,
     required this.createdAt,
+    this.reply,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class Review {
       rating: (json['rating'] as num).toDouble(),
       comment: json['comment'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
+      reply: json['reply'] as String?,
     );
   }
 
@@ -38,6 +41,7 @@ class Review {
       'rating': rating,
       'comment': comment,
       'createdAt': createdAt.toIso8601String(),
+      if (reply != null) 'reply': reply,
     };
   }
 } 

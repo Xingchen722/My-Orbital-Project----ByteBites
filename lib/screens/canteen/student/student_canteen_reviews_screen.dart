@@ -210,6 +210,13 @@ class _StudentCanteenReviewsScreenState extends State<StudentCanteenReviewsScree
                                         review.comment,
                                         style: const TextStyle(fontSize: 14),
                                       ),
+                                      if ((review as dynamic).reply != null && (review as dynamic).reply.toString().isNotEmpty) ...[
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          '${AppLocalizations.of(context)!.vendorReply}: ${(review as dynamic).reply}',
+                                          style: const TextStyle(fontSize: 13, color: Colors.green, fontStyle: FontStyle.italic),
+                                        ),
+                                      ],
                                     ],
                                   ],
                                 ),
