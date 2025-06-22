@@ -105,4 +105,11 @@ class AppLocalizations {
   String get sortByName => translate('sortByName');
   String get searchByDish => translate('searchByDish');
   String get noCanteenFound => translate('noCanteenFound');
+  String get queueCrowded => translate('queueCrowded');
+  String get queueMedium => translate('queueMedium');
+  String get queueFew => translate('queueFew');
+  String get queueEstimationButton => translate('queueEstimationButton');
+  String get favoriteOnly => translate('favoriteOnly');
+  String get queueEstimationTitle => translate('queueEstimationTitle');
+  String get distance => translate('distance');
 }

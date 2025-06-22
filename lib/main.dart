@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_application_1/pages/canteen_queue_page.dart';
 
 void main() {
   runApp(const ByteBitesApp());
@@ -64,6 +65,7 @@ class ByteBitesAppState extends State<ByteBitesApp> {
       routes: {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/canteen_queue': (context) => CanteenQueuePage(),
       },
     );
   }

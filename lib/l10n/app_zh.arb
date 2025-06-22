@@ -96,5 +96,13 @@
     "menuAndReviews": "菜单与点评",
     "noAnnouncementsYet": "暂无公告",
     "menuChanged": "菜单有变更",
-    "vendorReplied": "商家回复了评价"
+    "vendorReplied": "商家回复了评价",
+    "queueCrowded": "人数多，排队时间较长",
+    "queueMedium": "人数中等，排队时间适中",
+    "queueFew": "人数较少，可以优先选择",
+    "queueEstimationButton": "食堂排队情况估算",
+    "favoriteOnly": "已收藏",
+    "queueEstimationTitle": "食堂排队情况估计",
+    "distance": "距离",
+    "currentPosition": "当前位置"
 } 

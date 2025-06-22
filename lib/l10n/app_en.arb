@@ -96,5 +96,13 @@
     "menuAndReviews": "Menu & Reviews",
     "noAnnouncementsYet": "No announcements yet",
     "menuChanged": "Menu has been updated",
-    "vendorReplied": "Vendor replied to a review"
+    "vendorReplied": "Vendor replied to a review",
+    "queueCrowded": "Many people, long waiting time",
+    "queueMedium": "Moderate crowd, average waiting time",
+    "queueFew": "Few people, you can choose this canteen first",
+    "queueEstimationButton": "Canteen Queue Estimation",
+    "favoriteOnly": "Favorites Only",
+    "queueEstimationTitle": "Canteen Queue Estimation",
+    "distance": "Distance",
+    "currentPosition": "Current Position"
 } 

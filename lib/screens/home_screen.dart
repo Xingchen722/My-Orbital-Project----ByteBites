@@ -9,7 +9,22 @@ class CanteenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Canteen Page', style: TextStyle(fontSize: 24)));
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Canteen Page', style: TextStyle(fontSize: 24)),
+          SizedBox(height: 24),
+          ElevatedButton.icon(
+            icon: Icon(Icons.queue),
+            label: Text('食堂排队情况估算'),
+            onPressed: () {
+              Navigator.pushNamed(context, '/canteen_queue');
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
 

@@ -135,12 +135,35 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
   String? _locationError;
   String _searchText = '';
   String _sortType = 'distance'; // distance, rating, name
+  Set<String> _favoriteCanteenIds = {};
 
   @override
   void initState() {
     super.initState();
     _filteredCanteens = List.from(_allCanteens);
+    _loadFavorites();
     _getUserLocation();
+  }
+
+  Future<void> _loadFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final favs = prefs.getStringList('favorite_canteen_ids') ?? [];
+    setState(() {
+      _favoriteCanteenIds = favs.toSet();
+    });
+  }
+
+  Future<void> _toggleFavorite(String canteenId) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (_favoriteCanteenIds.contains(canteenId)) {
+        _favoriteCanteenIds.remove(canteenId);
+      } else {
+        _favoriteCanteenIds.add(canteenId);
+      }
+    });
+    await prefs.setStringList('favorite_canteen_ids', _favoriteCanteenIds.toList());
+    _applyFilterAndSort();
   }
 
   Future<void> _getUserLocation() async {
@@ -187,6 +210,10 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
     if (_searchText.trim().isNotEmpty) {
       final query = _searchText.trim().toLowerCase();
       canteens = canteens.where((c) => c.menu.any((item) => item.toLowerCase().contains(query))).toList();
+    }
+    // 收藏筛选
+    if (_sortType == 'favorite') {
+      canteens = canteens.where((c) => _favoriteCanteenIds.contains(c.id)).toList();
     }
     // 动态获取评分
     final prefs = await SharedPreferences.getInstance();
@@ -237,12 +264,92 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
     return d;
   }
 
+  String _estimateQueue(double distance, DateTime now, AppLocalizations l10n) {
+    if (now.hour >= 11 && now.hour <= 13) {
+      if (distance < 100) return l10n.queueCrowded;
+      if (distance < 300) return l10n.queueMedium;
+      return l10n.queueFew;
+    } else {
+      if (distance < 100) return l10n.queueMedium;
+      return l10n.queueFew;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.queue),
+                label: Text(l10n.queueEstimationButton),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(l10n.queueEstimationTitle),
+                        content: SizedBox(
+                          width: double.maxFinite,
+                          child: _userPosition == null
+                              ? Center(child: CircularProgressIndicator())
+                              : ListView(
+                                  shrinkWrap: true,
+                                  children: _allCanteens.map((canteen) {
+                                    final distance = _userPosition == null
+                                        ? 0.0
+                                        : Geolocator.distanceBetween(
+                                            _userPosition!.latitude,
+                                            _userPosition!.longitude,
+                                            canteen.latitude,
+                                            canteen.longitude,
+                                          );
+                                    final queue = _estimateQueue(distance, DateTime.now(), l10n);
+                                    return ListTile(
+                                      title: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            canteen.name,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          queueIndicator(queue, l10n),
+                                        ],
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${canteen.location}\n${l10n.distance}：${distance.toStringAsFixed(1)} 米'),
+                                          Text(queue),
+                                        ],
+                                      ),
+                                      leading: Icon(Icons.restaurant),
+                                    );
+                                  }).toList(),
+                                ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text('关闭'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Row(
@@ -269,6 +376,7 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
                     DropdownMenuItem(value: 'distance', child: Text(l10n.sortByDistance)),
                     DropdownMenuItem(value: 'rating', child: Text(l10n.sortByRating)),
                     DropdownMenuItem(value: 'name', child: Text(l10n.sortByName)),
+                    DropdownMenuItem(value: 'favorite', child: Row(children: [Icon(Icons.favorite_border, color: Colors.red, size: 18), SizedBox(width: 4), Text(l10n.favoriteOnly)]))
                   ],
                   onChanged: (value) {
                     if (value != null) {
@@ -285,7 +393,7 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
           if (_userPosition != null)
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('当前位置：${_userPosition!.latitude.toStringAsFixed(5)}, ${_userPosition!.longitude.toStringAsFixed(5)}'),
+              child: Text('${l10n.currentPosition}：${_userPosition!.latitude.toStringAsFixed(5)}, ${_userPosition!.longitude.toStringAsFixed(5)}'),
             ),
           if (_locationError != null)
             Padding(
@@ -300,11 +408,72 @@ class _StudentCanteenListState extends State<StudentCanteenList> {
                     itemCount: _filteredCanteens.length,
                     itemBuilder: (context, index) {
                       final canteen = _filteredCanteens[index];
-                      return StudentCanteenCard(canteen: canteen);
+                      return Stack(
+                        children: [
+                          StudentCanteenCard(
+                            canteen: canteen,
+                            titleWidget: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(canteen.name),
+                                queueIndicator(
+                                  _estimateQueue(
+                                    _userPosition == null
+                                        ? 0.0
+                                        : Geolocator.distanceBetween(
+                                            _userPosition!.latitude,
+                                            _userPosition!.longitude,
+                                            canteen.latitude,
+                                            canteen.longitude,
+                                          ),
+                                    DateTime.now(),
+                                    l10n,
+                                  ),
+                                  l10n,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: IconButton(
+                              icon: Icon(
+                                _favoriteCanteenIds.contains(canteen.id)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: _favoriteCanteenIds.contains(canteen.id) ? Colors.red : Colors.grey,
+                              ),
+                              onPressed: () => _toggleFavorite(canteen.id),
+                              tooltip: _favoriteCanteenIds.contains(canteen.id) ? l10n.cancel : l10n.add,
+                            ),
+                          ),
+                        ],
+                      );
                     },
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget queueIndicator(String queueType, AppLocalizations l10n) {
+    Color color;
+    if (queueType == l10n.queueCrowded) {
+      color = Colors.red;
+    } else if (queueType == l10n.queueMedium) {
+      color = Colors.orange;
+    } else {
+      color = Colors.green;
+    }
+    return Container(
+      margin: const EdgeInsets.only(left: 8),
+      width: 14,
+      height: 14,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
       ),
     );
   }

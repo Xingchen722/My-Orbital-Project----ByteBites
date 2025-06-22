@@ -10,10 +10,12 @@ import 'package:flutter_application_1/screens/canteen/student/student_canteen_me
 
 class StudentCanteenCard extends StatefulWidget {
   final Canteen canteen;
+  final Widget? titleWidget;
 
   const StudentCanteenCard({
     super.key,
     required this.canteen,
+    this.titleWidget,
   });
 
   @override
@@ -171,12 +173,26 @@ class _StudentCanteenCardState extends State<StudentCanteenCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.canteen.name,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      '', // 占位，见下方
                     ),
+                    if (widget.titleWidget != null)
+                      DefaultTextStyle(
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        child: widget.titleWidget!,
+                      )
+                    else
+                      Text(
+                        widget.canteen.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
