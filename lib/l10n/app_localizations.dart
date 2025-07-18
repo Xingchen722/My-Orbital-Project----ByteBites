@@ -113,4 +113,6 @@ class AppLocalizations {
   String get queueEstimationTitle => translate('queueEstimationTitle');
   String get distance => translate('distance');
   String get vendorReply => translate('vendorReply');
+  // 新增退出登录
+  String get logout => translate('logout');
 }

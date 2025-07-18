@@ -393,6 +393,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          // 趣味互动按钮下方添加退出登录按钮
+          const SizedBox(height: 30),
+          ElevatedButton.icon(
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('currentUsername');
+              await prefs.remove('currentUserType');
+              await prefs.remove('currentUserAvatar');
+              if (mounted) {
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+              }
+            },
+            icon: const Icon(Icons.logout),
+            label: Text(AppLocalizations.of(context)!.logout),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              minimumSize: const Size(double.infinity, 50),
+            ),
+          ),
         ],
       ),
     );

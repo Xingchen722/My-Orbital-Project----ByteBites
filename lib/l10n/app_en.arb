@@ -105,5 +105,6 @@
     "queueEstimationTitle": "Canteen Queue Estimation",
     "distance": "Distance",
     "currentPosition": "Current Position",
-    "vendorReply": "Vendor Reply"
+    "vendorReply": "Vendor Reply",
+    "logout": "Logout"
 } 

@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_application_1/screens/vendor/vendor_menu_page.dart';
 import 'package:flutter_application_1/screens/vendor/vendor_reviews_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VendorCanteenPage extends StatelessWidget {
   const VendorCanteenPage({super.key});
@@ -256,6 +257,25 @@ class _VendorProfilePageState extends State<VendorProfilePage> {
             label: 'Canteen ID',
             value: canteenId,
             onSave: _saveCanteenId,
+          ),
+          // 退出登录按钮
+          const SizedBox(height: 30),
+          ElevatedButton.icon(
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove('currentUsername');
+              await prefs.remove('currentUserType');
+              await prefs.remove('currentUserAvatar');
+              if (mounted) {
+                Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+              }
+            },
+            icon: const Icon(Icons.logout),
+            label: Text(AppLocalizations.of(context)!.logout),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              minimumSize: const Size(double.infinity, 50),
+            ),
           ),
         ],
       ),
