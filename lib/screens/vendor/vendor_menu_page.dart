@@ -66,14 +66,14 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(dish == null ? 'Add Dish' : 'Edit Dish'),
+        title: Text(dish == null ? AppLocalizations.of(context)!.addDish : AppLocalizations.of(context)!.editDish),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: nameCtrl, decoration: InputDecoration(labelText: 'Dish Name')),
-              TextField(controller: descCtrl, decoration: InputDecoration(labelText: 'Description')),
-              TextField(controller: priceCtrl, decoration: InputDecoration(labelText: 'Price'), keyboardType: TextInputType.number),
+              TextField(controller: nameCtrl, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.dishName)),
+              TextField(controller: descCtrl, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.description)),
+              TextField(controller: priceCtrl, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.price), keyboardType: TextInputType.number),
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () async {
@@ -96,7 +96,7 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.cancel)),
           ElevatedButton(
             onPressed: () async {
               final name = nameCtrl.text.trim();
@@ -121,7 +121,7 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
               await _saveDishes();
               Navigator.pop(context);
             },
-            child: Text('Save'),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ],
       ),
@@ -131,7 +131,7 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Menu Management')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.menuManagement)),
       body: ListView.builder(
         itemCount: dishes.length,
         itemBuilder: (context, i) {
@@ -140,17 +140,93 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
             leading: dish['imageUrl'] != null
                 ? Image.file(File(dish['imageUrl']), width: 48, height: 48, fit: BoxFit.cover)
                 : Icon(Icons.image, size: 48, color: Colors.grey[400]),
-            title: Text(dish['name'] ?? ''),
+            title: Row(
+              children: [
+                Text(dish['name'] ?? ''),
+                const SizedBox(width: 8),
+                if (!(dish['available'] ?? true))
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.red[100],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(AppLocalizations.of(context)!.unshelve, style: const TextStyle(color: Colors.red, fontSize: 12)),
+                  ),
+              ],
+            ),
             subtitle: Text('S\$${dish['price']?.toStringAsFixed(2) ?? ''}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // 上下架按钮
+                IconButton(
+                  icon: Icon(
+                    dish['available'] ?? true ? Icons.visibility : Icons.visibility_off,
+                    color: dish['available'] ?? true ? Colors.green : Colors.grey,
+                  ),
+                  tooltip: dish['available'] ?? true ? AppLocalizations.of(context)!.unshelve : AppLocalizations.of(context)!.shelve,
+                  onPressed: () async {
+                    setState(() {
+                      dishes[i]['available'] = !(dish['available'] ?? true);
+                    });
+                    await _saveDishes();
+                  },
+                ),
+                // 上移
+                IconButton(
+                  icon: const Icon(Icons.arrow_upward, color: Colors.blue),
+                  tooltip: AppLocalizations.of(context)!.moveUp,
+                  onPressed: i > 0
+                      ? () async {
+                          setState(() {
+                            final temp = dishes[i - 1];
+                            dishes[i - 1] = dishes[i];
+                            dishes[i] = temp;
+                          });
+                          await _saveDishes();
+                        }
+                      : null,
+                ),
+                // 下移
+                IconButton(
+                  icon: const Icon(Icons.arrow_downward, color: Colors.blue),
+                  tooltip: AppLocalizations.of(context)!.moveDown,
+                  onPressed: i < dishes.length - 1
+                      ? () async {
+                          setState(() {
+                            final temp = dishes[i + 1];
+                            dishes[i + 1] = dishes[i];
+                            dishes[i] = temp;
+                          });
+                          await _saveDishes();
+                        }
+                      : null,
+                ),
+                // 复制
+                IconButton(
+                  icon: const Icon(Icons.copy, color: Colors.purple),
+                  tooltip: AppLocalizations.of(context)!.copy,
+                  onPressed: () async {
+                    final newDish = Map<String, dynamic>.from(dish);
+                    newDish['id'] = DateTime.now().millisecondsSinceEpoch.toString();
+                    newDish['name'] = newDish['name'] + ' (${AppLocalizations.of(context)!.copy})';
+                    setState(() {
+                      dishes.insert(i + 1, newDish);
+                    });
+                    await _saveDishes();
+                  },
+                ),
+                // 编辑
                 IconButton(
                   icon: Icon(Icons.edit, color: Colors.orange),
+                  tooltip: AppLocalizations.of(context)!.edit,
                   onPressed: () => _showDishDialog(dish: dish, index: i),
                 ),
+                // 删除
                 IconButton(
                   icon: Icon(Icons.delete, color: Colors.red),
+                  tooltip: AppLocalizations.of(context)!.cancel,
                   onPressed: () async {
                     setState(() {
                       dishes.removeAt(i);
@@ -165,6 +241,7 @@ class _VendorMenuPageState extends State<VendorMenuPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showDishDialog(),
+        tooltip: AppLocalizations.of(context)!.add,
         child: Icon(Icons.add),
       ),
     );

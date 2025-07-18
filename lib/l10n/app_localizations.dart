@@ -115,4 +115,24 @@ class AppLocalizations {
   String get vendorReply => translate('vendorReply');
   // 新增退出登录
   String get logout => translate('logout');
+  String get addDish => translate('addDish');
+  String get editDish => translate('editDish');
+  String get dishName => translate('dishName');
+  String get description => translate('description');
+  String get price => translate('price');
+  String get replyToReview => translate('replyToReview');
+  String get reply => translate('reply');
+  String get english => translate('english');
+  String get chinese => translate('chinese');
+  String get canteenDescription => translate('canteenDescription');
+  String get editCanteenDescription => translate('editCanteenDescription');
+  String get enterCanteenDescription => translate('enterCanteenDescription');
+  String get noDescription => translate('noDescription');
+  String get enterAnnouncementContent => translate('enterAnnouncementContent');
+  String get canteenEnvironmentImages => translate('canteenEnvironmentImages');
+  String get uploadEnvironmentImages => translate('uploadEnvironmentImages');
+  String get openingHours => translate('openingHours');
+  String get address => translate('address');
+  String get canteenId => translate('canteenId');
+  String get updated => translate('updated');
 }
