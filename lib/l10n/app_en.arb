@@ -1,0 +1,110 @@
+{
+    "appTitle": "ByteBites",
+    "canteen": "Canteen",
+    "explore": "Explore",
+    "profile": "Profile",
+    "nickname": "Nickname",
+    "dietaryPreference": "Dietary Preference",
+    "language": "Language",
+    "noPreference": "No Preference",
+    "vegetarian": "Vegetarian",
+    "vegan": "Vegan",
+    "halal": "Halal",
+    "kosher": "Kosher",
+    "glutenFree": "Gluten-Free",
+    "nutAllergy": "Nut Allergy",
+    "lactoseIntolerant": "Lactose Intolerant",
+    "pescatarian": "Pescatarian",
+    "loading": "Loading...",
+    "noMatchingUsers": "No matching users found",
+    "viewProfile": "View {nickname}'s profile",
+    "@viewProfile": {
+        "placeholders": {
+            "nickname": {
+                "type": "String"
+            }
+        }
+    },
+    "languageChanged": "Language changed to {language}",
+    "@languageChanged": {
+        "placeholders": {
+            "language": {
+                "type": "String"
+            }
+        }
+    },
+    "studentHome": "Student Home",
+    "viewAndOrder": "View and order from canteens",
+    "viewMenu": "View Menu",
+    "menuNotification": "Viewing menu of {canteen}",
+    "@menuNotification": {
+        "placeholders": {
+            "canteen": {
+                "type": "String"
+            }
+        }
+    },
+    "canteenDescriptionSummit": "Modern dining center offering diverse food choices",
+    "canteenDescriptionFrontier": "Offering various Asian and Western cuisines",
+    "canteenDescriptionTechno": "Convenient restaurant near the Engineering School",
+    "canteenDescriptionPGP": "Restaurant near PGP dormitory",
+    "canteenDescriptionDeck": "Restaurant near the Arts & Social Sciences",
+    "canteenDescriptionTerrace": "Restaurant near the Business School",
+    "canteenDescriptionYIH": "Restaurant offering halal food",
+    "canteenDescriptionFineFood": "Premium dining experience with international cuisine",
+    "writeReview": "Write Review",
+    "selectRating": "Select Rating",
+    "writeYourReview": "Write your review...",
+    "pleaseWriteReview": "Please write a review",
+    "pleaseSelectRating": "Please select a rating",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "reviews": "Reviews",
+    "noReviewsYet": "No reviews yet",
+    "viewAllReviews": "View All Reviews",
+    "reviewSubmitted": "Review submitted successfully",
+    "minutesAgo": "minutes ago",
+    "hoursAgo": "hours ago",
+    "yesterday": "yesterday",
+    "daysAgo": "days ago",
+    "funInteraction": "Fun Interaction",
+    "funInteractionDescription": "Can't decide what to eat? Let our wheel or dice help you choose!",
+    "tryFunInteraction": "Try Fun Interaction",
+    "selectMode": "Select Mode",
+    "wheel": "Wheel",
+    "dice": "Dice",
+    "selectType": "Select Type",
+    "custom": "Custom",
+    "defaultOption": "Default",
+    "customFoods": "Custom Foods",
+    "noCustomFoods": "No custom foods added yet",
+    "addCustomFood": "Add Custom Food",
+    "enterFoodName": "Enter food name",
+    "add": "Add",
+    "spinWheel": "Spin Wheel",
+    "spinning": "Spinning...",
+    "rollDice": "Roll Dice",
+    "rolling": "Rolling...",
+    "result": "Result",
+    "ok": "OK",
+    "sortByDistance": "Distance",
+    "sortByRating": "Rating",
+    "sortByName": "Name",
+    "searchByDish": "Search by dish name",
+    "noCanteenFound": "No canteen found",
+    "edit": "Edit",
+    "menuAndReviews": "Menu & Reviews",
+    "noAnnouncementsYet": "No announcements yet",
+    "menuChanged": "Menu has been updated",
+    "vendorReplied": "Vendor replied to a review",
+    "queueCrowded": "Many people, long waiting time",
+    "queueMedium": "Moderate crowd, average waiting time",
+    "queueFew": "Few people, you can choose this canteen first",
+    "queueEstimationButton": "Canteen Queue Estimation",
+    "favoriteOnly": "Favorites Only",
+    "queueEstimationTitle": "Canteen Queue Estimation",
+    "distance": "Distance",
+    "currentPosition": "Current Position",
+    "vendorReply": "Vendor Reply",
+    "logout": "Logout"
+} 
