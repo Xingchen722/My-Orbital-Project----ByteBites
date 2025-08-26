@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=/Orbital1/">
+    <script>
+      // GitHub Pages SPA redirect: preserve path after refresh
+      (function() {
+        var redirect = sessionStorage.getItem('redirect');
+        if (redirect) {
+          sessionStorage.removeItem('redirect');
+          window.location.href = redirect;
+        } else {
+          var path = window.location.pathname.replace(/^\/Orbital1/, '');
+          sessionStorage.setItem('redirect', '/Orbital1/' + (path + window.location.search + window.location.hash).replace(/^\/?/, ''));
+          window.location.replace('/Orbital1/');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+  </html>
+
