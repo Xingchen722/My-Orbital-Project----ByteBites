@@ -1,0 +1,12 @@
+// 在文件顶部进行插件管理
+pluginManagement {
+	repositories {
+		maven { url = 'https://repo.spring.io/milestone' }
+		maven { url = 'https://repo.spring.io/snapshot' }
+		gradlePluginPortal()
+	}
+}
+
+// 设置项目名称
+rootProject.name = 'demo'
+
